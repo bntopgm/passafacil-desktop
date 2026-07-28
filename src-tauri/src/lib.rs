@@ -28,13 +28,8 @@ fn scanner_info(state: State<'_, ScannerState>) -> scanner::ScannerInfo {
 }
 
 #[tauri::command]
-async fn scanner_setup_usb(state: State<'_, ScannerState>) -> Result<String, String> {
-    scanner::setup_usb(&state.0).await
-}
-
-#[tauri::command]
-fn scanner_usb_qr(state: State<'_, ScannerState>) -> String {
-    scanner::usb_qr(&state.0)
+fn scanner_abrir_firewall() -> Result<(), String> {
+    scanner::abrir_firewall()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -65,8 +60,7 @@ pub fn run() {
             scanner_start,
             scanner_stop,
             scanner_info,
-            scanner_setup_usb,
-            scanner_usb_qr,
+            scanner_abrir_firewall,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -147,36 +147,19 @@ pub async fn start(scanner: ScannerShared, app: AppHandle) -> Result<ScannerInfo
     Ok(get_info(&scanner))
 }
 
-pub async fn setup_usb(scanner: &ScannerShared) -> Result<String, String> {
-    let s = scanner.lock().unwrap();
-    if !s.running {
-        return Err("Inicie o servidor primeiro".into());
-    }
-    let port = s.port;
-    drop(s);
-
-    // Tenta adb reverse automaticamente
-    let adb_result = std::process::Command::new("adb")
-        .args(["reverse", &format!("tcp:{}", port), &format!("tcp:{}", port)])
-        .output();
-
-    match adb_result {
-        Ok(out) if out.status.success() => Ok("ok".into()),
-        Ok(out) => {
-            let stderr = String::from_utf8_lossy(&out.stderr).to_string();
-            Err(if stderr.is_empty() { "adb falhou".into() } else { stderr })
-        }
-        Err(_) => Err("adb não encontrado".into()),
-    }
-}
-
-pub fn usb_qr(scanner: &ScannerShared) -> String {
-    let s = scanner.lock().unwrap();
-    if !s.running {
-        return String::new();
-    }
-    let url = format!("http://127.0.0.1:{}?token={}", s.port, s.token);
-    make_qr_svg(&url)
+pub fn abrir_firewall() -> Result<(), String> {
+    // Executa netsh com elevação via PowerShell RunAs (mostra UAC do Windows)
+    let cmd = format!(
+        "netsh advfirewall firewall add rule name='Passa Facil Scanner' dir=in action=allow protocol=TCP localport=8765"
+    );
+    std::process::Command::new("powershell")
+        .args([
+            "-Command",
+            &format!("Start-Process cmd -ArgumentList '/c {}' -Verb RunAs -Wait", cmd),
+        ])
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
 }
 
 pub fn stop(scanner: &ScannerShared) {

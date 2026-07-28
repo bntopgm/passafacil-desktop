@@ -6,6 +6,7 @@ import {
   BarChart2,
   HelpCircle,
   Settings,
+  ScanLine,
 } from "lucide-react";
 
 interface NavItem {
@@ -31,6 +32,11 @@ const navItems: NavItem[] = [
     to: "/historico",
     icon: <Clock size={18} />,
     label: "Histórico",
+  },
+  {
+    to: "/scanner",
+    icon: <ScanLine size={18} />,
+    label: "Scanner",
   },
   {
     to: "/relatorios",

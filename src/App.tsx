@@ -6,6 +6,7 @@ import Historico from "./pages/Historico";
 import Relatorios from "./pages/Relatorios";
 import Ajuda from "./pages/Ajuda";
 import Configuracoes from "./pages/Configuracoes";
+import Scanner from "./pages/Scanner";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/produtos" element={<Produtos />} />
           <Route path="/historico" element={<Historico />} />
           <Route path="/relatorios" element={<Relatorios />} />
+          <Route path="/scanner" element={<Scanner />} />
           <Route path="/ajuda" element={<Ajuda />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
         </Route>

@@ -1,7 +1,7 @@
 export interface Produto {
   id: number;
   nome: string;
-  descricao: string;
+  descricao?: string;
   preco_venda: number;
   preco_custo?: number;
   codigo_barras?: string;
@@ -15,20 +15,42 @@ export interface ItemVenda {
   subtotal: number;
 }
 
-export type FormaPagamento =
-  | "dinheiro"
-  | "cartao_credito"
-  | "cartao_debito"
-  | "pix"
-  | "outro";
-
-export type StatusVenda = "aberta" | "finalizada" | "cancelada";
-
-export interface Venda {
+export interface ItemVendaRow {
   id: number;
-  itens: ItemVenda[];
+  produto_id: number;
+  nome_produto: string;
+  quantidade: number;
+  preco_unitario: number;
+  subtotal: number;
+}
+
+export interface VendaResumo {
+  id: number;
   total: number;
-  forma_pagamento: FormaPagamento;
-  status: StatusVenda;
+  forma_pagamento: string;
+  status: string;
   criado_em: string;
+  qtd_itens: number;
+}
+
+export interface VendaCompleta {
+  id: number;
+  total: number;
+  forma_pagamento: string;
+  status: string;
+  criado_em: string;
+  itens: ItemVendaRow[];
+}
+
+export interface RelatorioStats {
+  faturamento: number;
+  total_vendas: number;
+  ticket_medio: number;
+  total_itens_vendidos: number;
+}
+
+export interface ProdutoMaisVendido {
+  nome: string;
+  quantidade: number;
+  receita: number;
 }
